@@ -32,36 +32,55 @@
         filter: drop-shadow(0 10px 9px rgba(0,0,0,.42));
       }
       #creature .body { width: 100%; height: 100%; overflow: visible; transform-origin: 50% 83%; }
-      #creature .head, #creature .arm, #creature .leg { transform-box: fill-box; transform-origin: top center; }
+      #creature .head, #creature .rig { transform-box: view-box; }
+      .arm-left { transform-origin: 28px 58px; } .arm-right { transform-origin: 54px 58px; }
+      .forearm-left { transform-origin: 22px 72px; } .forearm-right { transform-origin: 60px 72px; }
+      .leg-left { transform-origin: 35px 82px; } .leg-right { transform-origin: 47px 82px; }
+      .shin-left { transform-origin: 31px 95px; } .shin-right { transform-origin: 51px 95px; }
       #creature.walking .body { animation: torso-walk .68s infinite ease-in-out; }
-      #creature.walking .leg-left, #creature.running .leg-left { animation: stride-left .68s infinite ease-in-out; }
-      #creature.walking .leg-right, #creature.running .leg-right { animation: stride-right .68s infinite ease-in-out; }
-      #creature.walking .arm-left, #creature.running .arm-left { animation: stride-right .68s infinite ease-in-out; }
-      #creature.walking .arm-right, #creature.running .arm-right { animation: stride-left .68s infinite ease-in-out; }
+      #creature.walking .leg-left, #creature.running .leg-left { animation: thigh-forward .68s infinite cubic-bezier(.45,0,.55,1); }
+      #creature.walking .leg-right, #creature.running .leg-right { animation: thigh-back .68s infinite cubic-bezier(.45,0,.55,1); }
+      #creature.walking .shin-left, #creature.running .shin-left { animation: knee-a .68s infinite ease-in-out; }
+      #creature.walking .shin-right, #creature.running .shin-right { animation: knee-b .68s infinite ease-in-out; }
+      #creature.walking .arm-left, #creature.running .arm-left { animation: arm-back .68s infinite ease-in-out; }
+      #creature.walking .arm-right, #creature.running .arm-right { animation: arm-forward .68s infinite ease-in-out; }
+      #creature.walking .forearm-left, #creature.running .forearm-left { animation: elbow-a .68s infinite ease-in-out; }
+      #creature.walking .forearm-right, #creature.running .forearm-right { animation: elbow-b .68s infinite ease-in-out; }
       #creature.running .body { animation: torso-run .3s infinite ease-in-out; }
       #creature.running .limb { animation-duration: .3s; }
       #creature.running.climbing .body, #creature.running.hanging .body { animation-duration: .3s; }
       #creature.climbing .body { animation: climb-body .85s infinite ease-in-out; }
-      #creature.climbing .arm-left { animation: climb-left .85s infinite ease-in-out; }
-      #creature.climbing .arm-right { animation: climb-right .85s infinite ease-in-out; }
-      #creature.climbing .leg-left { animation: climb-right .85s infinite ease-in-out; }
-      #creature.climbing .leg-right { animation: climb-left .85s infinite ease-in-out; }
+      #creature.climbing .arm-left { animation: climb-arm-a .95s infinite ease-in-out; }
+      #creature.climbing .arm-right { animation: climb-arm-b .95s infinite ease-in-out; }
+      #creature.climbing .forearm-left { animation: climb-elbow-a .95s infinite ease-in-out; }
+      #creature.climbing .forearm-right { animation: climb-elbow-b .95s infinite ease-in-out; }
+      #creature.climbing .leg-left { animation: climb-leg-a .95s infinite ease-in-out; }
+      #creature.climbing .leg-right { animation: climb-leg-b .95s infinite ease-in-out; }
+      #creature.climbing .shin-left { animation: climb-knee-a .95s infinite ease-in-out; }
+      #creature.climbing .shin-right { animation: climb-knee-b .95s infinite ease-in-out; }
       #creature.hanging .body { animation: hang-sway .9s infinite ease-in-out; transform-origin: 50% 10%; }
-      #creature.hanging .arm-left { animation: reach-left .9s infinite steps(2); }
-      #creature.hanging .arm-right { animation: reach-right .9s infinite steps(2); }
+      #creature.hanging .arm-left { animation: hang-arm-a .95s infinite ease-in-out; }
+      #creature.hanging .arm-right { animation: hang-arm-b .95s infinite ease-in-out; }
+      #creature.hanging .forearm-left { animation: hang-elbow-a .95s infinite ease-in-out; }
+      #creature.hanging .forearm-right { animation: hang-elbow-b .95s infinite ease-in-out; }
       #creature.hanging .leg-left { animation: dangle-left .9s infinite ease-in-out; }
       #creature.hanging .leg-right { animation: dangle-right .9s infinite ease-in-out; }
       #creature.sleeping { transform-origin: 35% 90%; }
       #creature.sleeping .body { animation: lie-down .65s forwards ease-out, sleep-breathe 2.2s .65s infinite ease-in-out; }
-      #creature.sleeping .arm-left { transform: rotate(65deg) translate(1px,4px); }
-      #creature.sleeping .arm-right { transform: rotate(-45deg); }
+      #creature.sleeping .arm-left { transform: rotate(58deg); }
+      #creature.sleeping .arm-right { transform: rotate(-38deg); }
       #creature.spinning .body { animation: acrobatic-flip 1.25s cubic-bezier(.32,.72,.3,1); }
-      #creature.spinning .arm { animation: tuck-arm 1.25s ease-in-out; }
-      #creature.spinning .leg { animation: tuck-leg 1.25s ease-in-out; }
+      #creature.spinning .arm-left { animation: tuck-arm-left 1.25s ease-in-out; }
+      #creature.spinning .arm-right { animation: tuck-arm-right 1.25s ease-in-out; }
+      #creature.spinning .leg-left { animation: tuck-leg-left 1.25s ease-in-out; }
+      #creature.spinning .leg-right { animation: tuck-leg-right 1.25s ease-in-out; }
+      #creature.spinning .shin { animation: tuck-shin 1.25s ease-in-out; }
       #creature.jumping .body { animation: jump-body .9s cubic-bezier(.3,.05,.35,1); }
       #creature.jumping .arm-left { animation: jump-arm-left .9s ease-in-out; }
       #creature.jumping .arm-right { animation: jump-arm-right .9s ease-in-out; }
-      #creature.jumping .leg { animation: jump-leg .9s ease-in-out; }
+      #creature.jumping .leg-left { animation: jump-leg-left .9s ease-in-out; }
+      #creature.jumping .leg-right { animation: jump-leg-right .9s ease-in-out; }
+      #creature.jumping .shin { animation: jump-shin .9s ease-in-out; }
       #creature.singing .head { animation: sing .35s infinite alternate; }
       #creature.grimacing .mouth { d: path("M 32 43 Q 41 33 50 43 Q 41 49 32 43"); }
       #creature.frowning .brow-left { transform: rotate(18deg); }
@@ -73,9 +92,9 @@
       #creature.profile .mouth { transform: translateX(5px); }
       #creature:not(.profile) .nose-profile { opacity: 0; }
       #creature.profile .nose-profile { opacity: 1; }
-      #creature.hanging .arm { d: path("M 31 61 Q 27 38 30 10"); }
-      #creature.hanging .arm-right { d: path("M 52 61 Q 57 38 54 10"); }
-      .limb { fill: none; stroke: #d8b98c; stroke-width: 7; stroke-linecap: round; transform-box: fill-box; transform-origin: top center; }
+      .limb { fill: none; stroke: #d8b98c; stroke-width: 6.5; stroke-linecap: round; stroke-linejoin: round; }
+      .joint { fill: #d8b98c; } .shoe { fill: none; stroke: #252b29; stroke-width: 6; stroke-linecap: round; }
+      #creature.profile .far { opacity: .62; filter: brightness(.82); }
       .skin { fill: #d8b98c; } .shirt { fill: #d96b4b; } .pants { fill: #3c6b68; }
       .eye { fill: #151918; transform-box: fill-box; transform-origin: center; transition: transform .18s; }
       .pupil { fill: #f3eadb; pointer-events: none; }
@@ -91,27 +110,46 @@
       .bubble.show { opacity: 1; transform: translateY(0) scale(1); }
       .note, .zzz { position: fixed; z-index: 2; color: #eacb88; font-weight: 800; pointer-events: none; animation: float 1.8s forwards ease-out; }
       .footer { position: fixed; right: 27px; bottom: 24px; color: #59635f; font: 600 .6rem/1 monospace; letter-spacing: .12em; pointer-events: none; }
-      @keyframes torso-walk { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-4px) rotate(2deg); } }
-      @keyframes torso-run { 0%,100% { transform: translateY(1px) rotate(-9deg) scaleY(.97); } 50% { transform: translateY(-7px) rotate(-5deg); } }
-      @keyframes stride-left { 0%,100% { transform: rotate(30deg); } 50% { transform: rotate(-32deg); } }
-      @keyframes stride-right { 0%,100% { transform: rotate(-32deg); } 50% { transform: rotate(30deg); } }
-      @keyframes climb-body { 0%,100% { transform: translate(2px,2px) rotate(5deg); } 50% { transform: translate(-2px,-5px) rotate(-4deg); } }
-      @keyframes climb-left { 0%,100% { transform: rotate(150deg) translateY(-6px); } 50% { transform: rotate(92deg) translateY(5px); } }
-      @keyframes climb-right { 0%,100% { transform: rotate(92deg) translateY(5px); } 50% { transform: rotate(150deg) translateY(-6px); } }
-      @keyframes hang-sway { 0%,100% { transform: rotate(-5deg) translateX(-2px); } 50% { transform: rotate(6deg) translateX(3px); } }
-      @keyframes reach-left { 0%,49% { transform: rotate(10deg) translateY(-6px); } 50%,100% { transform: rotate(-13deg); } }
-      @keyframes reach-right { 0%,49% { transform: rotate(13deg); } 50%,100% { transform: rotate(-10deg) translateY(-6px); } }
+      @keyframes torso-walk { 0%,100% { transform: translateY(0) rotate(-1.5deg); } 25%,75% { transform: translateY(-3px); } 50% { transform: translateY(0) rotate(1.5deg); } }
+      @keyframes torso-run { 0%,100% { transform: translateY(2px) rotate(-10deg) scaleY(.96); } 50% { transform: translateY(-8px) rotate(-7deg); } }
+      @keyframes thigh-forward { 0%,100% { transform: rotate(27deg); } 50% { transform: rotate(-25deg); } }
+      @keyframes thigh-back { 0%,100% { transform: rotate(-25deg); } 50% { transform: rotate(27deg); } }
+      @keyframes knee-a { 0%,18%,100% { transform: rotate(8deg); } 48% { transform: rotate(62deg); } 72% { transform: rotate(25deg); } }
+      @keyframes knee-b { 0% { transform: rotate(62deg); } 22% { transform: rotate(25deg); } 50%,68% { transform: rotate(8deg); } 100% { transform: rotate(62deg); } }
+      @keyframes arm-forward { 0%,100% { transform: rotate(-24deg); } 50% { transform: rotate(22deg); } }
+      @keyframes arm-back { 0%,100% { transform: rotate(22deg); } 50% { transform: rotate(-24deg); } }
+      @keyframes elbow-a { 0%,100% { transform: rotate(-18deg); } 50% { transform: rotate(-42deg); } }
+      @keyframes elbow-b { 0%,100% { transform: rotate(-42deg); } 50% { transform: rotate(-18deg); } }
+      @keyframes climb-body { 0%,100% { transform: translate(3px,3px) rotate(7deg); } 35% { transform: translate(-1px,-7px) rotate(-3deg); } 55% { transform: translate(-3px,-8px) rotate(-6deg); } }
+      @keyframes climb-arm-a { 0%,100% { transform: rotate(150deg); } 40% { transform: rotate(108deg); } 55% { transform: rotate(92deg); } }
+      @keyframes climb-arm-b { 0%,45% { transform: rotate(92deg); } 60%,100% { transform: rotate(150deg); } }
+      @keyframes climb-elbow-a { 0%,100% { transform: rotate(-18deg); } 45% { transform: rotate(-65deg); } }
+      @keyframes climb-elbow-b { 0%,45% { transform: rotate(-65deg); } 75%,100% { transform: rotate(-18deg); } }
+      @keyframes climb-leg-a { 0%,100% { transform: rotate(52deg); } 48% { transform: rotate(-12deg); } }
+      @keyframes climb-leg-b { 0%,100% { transform: rotate(-12deg); } 48% { transform: rotate(52deg); } }
+      @keyframes climb-knee-a { 0%,100% { transform: rotate(82deg); } 48% { transform: rotate(28deg); } }
+      @keyframes climb-knee-b { 0%,100% { transform: rotate(28deg); } 48% { transform: rotate(82deg); } }
+      @keyframes hang-sway { 0%,100% { transform: translateY(0) rotate(-4deg); } 45% { transform: translateY(3px) rotate(5deg); } }
+      @keyframes hang-arm-a { 0%,40% { transform: rotate(166deg); } 55%,100% { transform: rotate(142deg); } }
+      @keyframes hang-arm-b { 0%,40% { transform: rotate(-142deg); } 55%,100% { transform: rotate(-166deg); } }
+      @keyframes hang-elbow-a { 0%,40% { transform: rotate(-8deg); } 55%,100% { transform: rotate(-42deg); } }
+      @keyframes hang-elbow-b { 0%,40% { transform: rotate(42deg); } 55%,100% { transform: rotate(8deg); } }
       @keyframes dangle-left { 0%,100% { transform: rotate(16deg); } 50% { transform: rotate(-24deg); } }
       @keyframes dangle-right { 0%,100% { transform: rotate(-18deg); } 50% { transform: rotate(22deg); } }
       @keyframes lie-down { to { transform: translate(-18px,22px) rotate(82deg); } }
       @keyframes sleep-breathe { 0%,100% { transform: translate(-18px,22px) rotate(82deg) scaleX(1); } 50% { transform: translate(-18px,22px) rotate(82deg) scaleX(.96); } }
       @keyframes acrobatic-flip { 0% { transform: translateY(0) rotate(0) scale(1); } 12% { transform: translateY(7px) rotate(-12deg) scale(1.08,.9); } 38% { transform: translateY(-34px) rotate(230deg) scale(.88); } 68% { transform: translateY(-25px) rotate(510deg) scale(.9); } 88% { transform: translateY(4px) rotate(715deg) scale(1.08,.9); } 100% { transform: translateY(0) rotate(720deg) scale(1); } }
-      @keyframes tuck-arm { 20%,75% { transform: rotate(70deg) translateX(7px); } }
-      @keyframes tuck-leg { 20%,75% { transform: rotate(-35deg) translateY(-7px); } }
+      @keyframes tuck-arm-left { 20%,75% { transform: rotate(68deg); } }
+      @keyframes tuck-arm-right { 20%,75% { transform: rotate(-68deg); } }
+      @keyframes tuck-leg-left { 20%,75% { transform: rotate(42deg); } }
+      @keyframes tuck-leg-right { 20%,75% { transform: rotate(-42deg); } }
+      @keyframes tuck-shin { 20%,75% { transform: rotate(105deg); } }
       @keyframes jump-body { 0%,100% { transform: translateY(0) scale(1); } 12% { transform: translateY(5px) scale(1.08,.9); } 48% { transform: translateY(-38px) rotate(4deg); } 86% { transform: translateY(3px) scale(1.06,.92); } }
       @keyframes jump-arm-left { 20%,65% { transform: rotate(145deg); } }
       @keyframes jump-arm-right { 20%,65% { transform: rotate(-145deg); } }
-      @keyframes jump-leg { 25%,70% { transform: rotate(35deg) translateY(-5px); } }
+      @keyframes jump-leg-left { 0%,100% { transform: rotate(0); } 12% { transform: rotate(30deg); } 40%,68% { transform: rotate(-28deg); } }
+      @keyframes jump-leg-right { 0%,100% { transform: rotate(0); } 12% { transform: rotate(-26deg); } 40%,68% { transform: rotate(32deg); } }
+      @keyframes jump-shin { 10%,72% { transform: rotate(75deg); } }
       @keyframes sing { to { transform: translateY(-2px) rotate(3deg); } }
       @keyframes float { to { transform: translate(18px,-55px) rotate(12deg); opacity: 0; } }
       @media (prefers-reduced-motion: reduce) { #creature .body { animation-duration: 1.5s !important; } }
@@ -123,8 +161,22 @@
     <div id="bubble" class="bubble" role="status" aria-live="polite"></div>
     <div id="creature" class="walking" aria-label="Un petit être curieux qui se promène">
       <svg class="body" viewBox="0 0 82 112" aria-hidden="true">
-        <path class="limb arm arm-left" d="M25 62 Q13 72 17 88"/><path class="limb arm arm-right" d="M57 62 Q70 72 65 87"/>
-        <path class="limb leg leg-left" d="M34 86 Q29 97 27 107"/><path class="limb leg leg-right" d="M49 86 Q53 98 56 107"/>
+        <g class="rig arm arm-right far">
+          <path class="limb" d="M54 58 L60 72"/><circle class="joint" cx="60" cy="72" r="3.3"/>
+          <g class="rig forearm forearm-right"><path class="limb" d="M60 72 L63 86"/><circle class="joint hand" cx="63" cy="87" r="4"/></g>
+        </g>
+        <g class="rig leg leg-right far">
+          <path class="limb" d="M47 82 L51 95"/><circle class="joint" cx="51" cy="95" r="3.4"/>
+          <g class="rig shin shin-right"><path class="limb" d="M51 95 L54 106"/><path class="shoe" d="M54 106 L62 108"/></g>
+        </g>
+        <g class="rig arm arm-left">
+          <path class="limb" d="M28 58 L22 72"/><circle class="joint" cx="22" cy="72" r="3.3"/>
+          <g class="rig forearm forearm-left"><path class="limb" d="M22 72 L19 86"/><circle class="joint hand" cx="19" cy="87" r="4"/></g>
+        </g>
+        <g class="rig leg leg-left">
+          <path class="limb" d="M35 82 L31 95"/><circle class="joint" cx="31" cy="95" r="3.4"/>
+          <g class="rig shin shin-left"><path class="limb" d="M31 95 L28 106"/><path class="shoe" d="M28 106 L36 108"/></g>
+        </g>
         <path class="pants" d="M27 79 Q41 74 55 79 L53 91 Q41 95 29 91Z"/>
         <path class="shirt" d="M23 54 Q41 48 59 54 L56 82 Q41 87 26 82Z"/>
         <g class="head">
