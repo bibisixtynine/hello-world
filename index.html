@@ -2,58 +2,165 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Une simple page Hello World." />
-    <title>Hello World</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="La maison d'un curieux petit être numérique." />
+    <title>Un petit être</title>
     <style>
-      :root {
-        color-scheme: light dark;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
+      :root { font-family: Inter, ui-rounded, "SF Pro Rounded", system-ui, sans-serif; }
       * { box-sizing: border-box; }
-
+      html, body { width: 100%; height: 100%; overflow: hidden; }
       body {
-        min-height: 100vh;
         margin: 0;
-        display: grid;
-        place-items: center;
-        color: #f8fafc;
+        color: #e8e3d8;
+        cursor: crosshair;
         background:
-          radial-gradient(circle at 20% 20%, #7c3aed 0, transparent 35%),
-          radial-gradient(circle at 80% 80%, #0891b2 0, transparent 35%),
-          #0f172a;
+          radial-gradient(circle at 50% 42%, rgba(61, 71, 69, .36), transparent 31rem),
+          linear-gradient(135deg, #171c1b, #0b0e0e 65%);
       }
-
-      main {
-        width: min(90%, 42rem);
-        padding: 4rem 2rem;
-        text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 2rem;
-        background: rgba(15, 23, 42, 0.55);
-        box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.3);
-        backdrop-filter: blur(18px);
+      body::before {
+        content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .35;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
       }
-
-      h1 {
-        margin: 0;
-        font-size: clamp(3rem, 10vw, 7rem);
-        line-height: 0.95;
-        letter-spacing: -0.07em;
+      .intro { position: fixed; inset: 0; display: grid; place-content: center; text-align: center; pointer-events: none; opacity: .72; }
+      .intro p { margin: 0; font-size: clamp(.65rem, 1.1vw, .8rem); letter-spacing: .32em; text-transform: uppercase; }
+      .intro span { display: block; margin-top: .8rem; color: #7f8a86; font-size: .7rem; letter-spacing: .08em; }
+      .track { position: fixed; inset: 17px; border: 1px solid rgba(203, 217, 210, .1); border-radius: 24px; pointer-events: none; }
+      #creature {
+        --turn: 0deg; --lean: 0deg;
+        position: fixed; left: 0; top: 0; width: 82px; height: 112px;
+        z-index: 3; transform-origin: 50% 88%; will-change: transform;
+        filter: drop-shadow(0 10px 9px rgba(0,0,0,.42));
       }
-
-      p {
-        margin: 1.5rem 0 0;
-        color: #cbd5e1;
-        font-size: clamp(1rem, 2vw, 1.25rem);
+      #creature .body { width: 100%; height: 100%; overflow: visible; transform-origin: 50% 83%; transform: rotate(var(--lean)); }
+      #creature.running .body { animation: run .18s infinite alternate ease-in-out; }
+      #creature.walking .body { animation: walk .5s infinite alternate ease-in-out; }
+      #creature.sleeping .body { animation: breathe 2.1s infinite ease-in-out; }
+      #creature.spinning .body { animation: spin .8s cubic-bezier(.3,.8,.4,1); }
+      #creature.singing .head { animation: sing .35s infinite alternate; }
+      #creature.grimacing .mouth { d: path("M 32 43 Q 41 33 50 43 Q 41 49 32 43"); }
+      #creature.frowning .brow-left { transform: rotate(18deg); }
+      #creature.frowning .brow-right { transform: rotate(-18deg); }
+      #creature.sleeping .eye { transform: scaleY(.08); }
+      #creature.sleeping .arm { transform: rotate(22deg); }
+      .limb { fill: none; stroke: #d8b98c; stroke-width: 7; stroke-linecap: round; transform-box: fill-box; transform-origin: top center; }
+      .skin { fill: #d8b98c; } .shirt { fill: #d96b4b; } .pants { fill: #3c6b68; }
+      .eye { fill: #151918; transform-box: fill-box; transform-origin: center; transition: transform .18s; }
+      .pupil { fill: #f3eadb; pointer-events: none; }
+      .brow { stroke: #493a2e; stroke-width: 2.7; stroke-linecap: round; transform-box: fill-box; transform-origin: center; transition: transform .2s; }
+      .mouth { fill: none; stroke: #493a2e; stroke-width: 2.3; stroke-linecap: round; transition: d .2s; }
+      .cheek { fill: #bc6e5c; opacity: .45; }
+      .bubble {
+        position: fixed; z-index: 4; max-width: 180px; padding: 9px 13px;
+        color: #252b29; background: #eee7d9; border-radius: 14px 14px 14px 3px;
+        font-size: .77rem; line-height: 1.25; box-shadow: 0 8px 22px rgba(0,0,0,.25);
+        opacity: 0; transform: translateY(8px) scale(.9); transition: .22s; pointer-events: none;
       }
+      .bubble.show { opacity: 1; transform: translateY(0) scale(1); }
+      .note, .zzz { position: fixed; z-index: 2; color: #eacb88; font-weight: 800; pointer-events: none; animation: float 1.8s forwards ease-out; }
+      .footer { position: fixed; right: 27px; bottom: 24px; color: #59635f; font: 600 .6rem/1 monospace; letter-spacing: .12em; pointer-events: none; }
+      @keyframes walk { to { transform: rotate(3deg) translateY(-3px); } }
+      @keyframes run { to { transform: rotate(6deg) translateY(-7px) scaleY(.95); } }
+      @keyframes breathe { 50% { transform: scaleY(.96) rotate(5deg); } }
+      @keyframes spin { to { transform: rotate(720deg); } }
+      @keyframes sing { to { transform: translateY(-2px) rotate(3deg); } }
+      @keyframes float { to { transform: translate(18px,-55px) rotate(12deg); opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) { #creature .body { animation-duration: 1.5s !important; } }
     </style>
   </head>
   <body>
-    <main>
-      <h1>Hello World!</h1>
-      <p>Bienvenue sur mon premier site en ligne.</p>
-    </main>
+    <div class="track"></div>
+    <main class="intro" aria-hidden="true"><p>Il vit ici</p><span>approchez doucement la souris</span></main>
+    <div id="bubble" class="bubble" role="status" aria-live="polite"></div>
+    <div id="creature" class="walking" aria-label="Un petit être curieux qui se promène">
+      <svg class="body" viewBox="0 0 82 112" aria-hidden="true">
+        <path class="limb arm arm-left" d="M25 62 Q13 72 17 88"/><path class="limb arm arm-right" d="M57 62 Q70 72 65 87"/>
+        <path class="limb leg leg-left" d="M34 86 Q29 97 27 107"/><path class="limb leg leg-right" d="M49 86 Q53 98 56 107"/>
+        <path class="pants" d="M27 79 Q41 74 55 79 L53 91 Q41 95 29 91Z"/>
+        <path class="shirt" d="M23 54 Q41 48 59 54 L56 82 Q41 87 26 82Z"/>
+        <g class="head">
+          <ellipse class="skin" cx="41" cy="34" rx="25" ry="27"/>
+          <path fill="#43372e" d="M18 30 Q16 7 41 6 Q65 6 65 29 Q58 15 43 16 Q28 13 18 30Z"/>
+          <ellipse class="cheek" cx="24" cy="42" rx="5" ry="3"/><ellipse class="cheek" cx="58" cy="42" rx="5" ry="3"/>
+          <line class="brow brow-left" x1="26" y1="27" x2="35" y2="26"/><line class="brow brow-right" x1="47" y1="26" x2="56" y2="27"/>
+          <g class="eye eye-left"><circle cx="31" cy="33" r="5"/><circle class="pupil pupil-left" cx="32" cy="31.5" r="1.6"/></g>
+          <g class="eye eye-right"><circle cx="51" cy="33" r="5"/><circle class="pupil pupil-right" cx="52" cy="31.5" r="1.6"/></g>
+          <path class="mouth" d="M34 44 Q41 48 48 44"/>
+        </g>
+      </svg>
+    </div>
+    <div class="footer">ÊTRE N° 01 · NE PAS ÉCRASER</div>
+    <script>
+      const el = document.querySelector('#creature');
+      const bubble = document.querySelector('#bubble');
+      const pupils = [...document.querySelectorAll('.pupil')];
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let x = 30, y = innerHeight - 145, side = 0, direction = 1, speed = 46;
+      let mouse = { x: innerWidth / 2, y: innerHeight / 2, active: false };
+      let state = 'walking', stateUntil = 0, last = performance.now(), lastTalk = 0;
+      const margin = 26, size = { w: 82, h: 112 };
+      const phrases = ['Tu me vois ?', 'Psst…', 'Pourquoi tu me regardes ?', 'Je réfléchis.', 'On se connaît ?', 'Quelle drôle de souris…'];
+
+      function bounds() { return { right: innerWidth - margin - size.w, bottom: innerHeight - margin - size.h }; }
+      function setState(next, duration = 2500) {
+        state = next; stateUntil = performance.now() + duration;
+        el.className = next;
+        if (next === 'singing') emitNotes();
+        if (next === 'sleeping') emitZzz();
+      }
+      function say(text, duration = 2400) {
+        bubble.textContent = text; bubble.classList.add('show'); lastTalk = performance.now();
+        clearTimeout(say.timer); say.timer = setTimeout(() => bubble.classList.remove('show'), duration);
+      }
+      function particle(text, cls) {
+        const n = document.createElement('span'); n.className = cls; n.textContent = text;
+        n.style.left = `${x + 55}px`; n.style.top = `${y + 10}px`; document.body.append(n); setTimeout(() => n.remove(), 1900);
+      }
+      function emitNotes() { particle('♪', 'note'); setTimeout(() => state === 'singing' && particle('♫', 'note'), 650); }
+      function emitZzz() { particle('z', 'zzz'); setTimeout(() => state === 'sleeping' && particle('Z', 'zzz'), 700); }
+      function flee() {
+        if (state !== 'running') say('Hé ! Pas touche !', 1500);
+        setState('running', 1800); speed = 190; direction = Math.random() > .5 ? 1 : -1;
+      }
+      function randomAct(now) {
+        if (now < stateUntil) return;
+        speed = 46;
+        const r = Math.random();
+        if (r < .15) { setState('sleeping', 3500); say('… cinq minutes…'); }
+        else if (r < .3) { setState('singing', 2800); say('La la laaa ♪'); }
+        else if (r < .43) setState('spinning', 900);
+        else if (r < .57) setState('grimacing', 1800);
+        else if (r < .7) { setState('frowning', 2200); say(phrases[Math.floor(Math.random()*phrases.length)]); }
+        else setState('walking', 2500 + Math.random()*3000);
+      }
+      function travel(distance) {
+        const b = bounds(); let d = distance * direction;
+        while (Math.abs(d) > .01) {
+          if (side === 0) { const room = direction > 0 ? b.right - x : x - margin; const step = Math.sign(d)*Math.min(Math.abs(d), Math.max(0,room)); x += step; d -= step; if (Math.abs(step) < .01) side = direction > 0 ? 1 : 3; }
+          else if (side === 1) { const room = direction > 0 ? y - margin : b.bottom - y; const step = Math.sign(d)*Math.min(Math.abs(d),Math.max(0,room)); y -= step; d -= step; if (Math.abs(step) < .01) side = direction > 0 ? 2 : 0; }
+          else if (side === 2) { const room = direction > 0 ? x - margin : b.right - x; const step = Math.sign(d)*Math.min(Math.abs(d),Math.max(0,room)); x -= step; d -= step; if (Math.abs(step) < .01) side = direction > 0 ? 3 : 1; }
+          else { const room = direction > 0 ? b.bottom - y : y - margin; const step = Math.sign(d)*Math.min(Math.abs(d),Math.max(0,room)); y += step; d -= step; if (Math.abs(step) < .01) side = direction > 0 ? 0 : 2; }
+        }
+      }
+      function frame(now) {
+        const dt = Math.min((now-last)/1000, .05); last = now;
+        const cx=x+41, cy=y+45, dx=mouse.x-cx, dy=mouse.y-cy, dist=Math.hypot(dx,dy);
+        if (mouse.active && dist < 145 && state !== 'sleeping') flee();
+        randomAct(now);
+        if (!['sleeping','singing','grimacing','frowning'].includes(state)) travel(speed * dt * (reduced ? .35 : 1));
+        const lookX = Math.max(-1.7, Math.min(1.7, dx/80)), lookY = Math.max(-1.4, Math.min(1.4, dy/80));
+        pupils.forEach(p => { p.setAttribute('transform', `translate(${lookX} ${lookY})`); });
+        const face = dx < 0 ? -1 : 1;
+        el.style.transform = `translate3d(${x}px,${y}px,0) scaleX(${face})`;
+        bubble.style.left = `${Math.max(12, Math.min(innerWidth-190, x+55))}px`; bubble.style.top = `${Math.max(12,y-18)}px`;
+        requestAnimationFrame(frame);
+      }
+      addEventListener('pointermove', e => { mouse={x:e.clientX,y:e.clientY,active:true}; });
+      addEventListener('pointerdown', e => { if (Math.hypot(e.clientX-(x+41),e.clientY-(y+45)) < 120) flee(); });
+      addEventListener('mouseleave', () => mouse.active=false);
+      addEventListener('resize', () => { const b=bounds(); x=Math.min(x,b.right); y=Math.min(y,b.bottom); });
+      setInterval(() => { if (state === 'singing') emitNotes(); if (state === 'sleeping') emitZzz(); }, 1500);
+      setInterval(() => { if (performance.now()-lastTalk > 9000 && Math.random()>.6) { setState('frowning',2200); say(phrases[Math.floor(Math.random()*phrases.length)]); } }, 5000);
+      requestAnimationFrame(frame);
+    </script>
   </body>
 </html>
