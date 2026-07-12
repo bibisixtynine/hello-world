@@ -31,17 +31,50 @@
         z-index: 3; transform-origin: 50% 88%; will-change: transform;
         filter: drop-shadow(0 10px 9px rgba(0,0,0,.42));
       }
-      #creature .body { width: 100%; height: 100%; overflow: visible; transform-origin: 50% 83%; transform: rotate(var(--lean)); }
-      #creature.running .body { animation: run .18s infinite alternate ease-in-out; }
-      #creature.walking .body { animation: walk .5s infinite alternate ease-in-out; }
-      #creature.sleeping .body { animation: breathe 2.1s infinite ease-in-out; }
-      #creature.spinning .body { animation: spin .8s cubic-bezier(.3,.8,.4,1); }
+      #creature .body { width: 100%; height: 100%; overflow: visible; transform-origin: 50% 83%; }
+      #creature .head, #creature .arm, #creature .leg { transform-box: fill-box; transform-origin: top center; }
+      #creature.walking .body { animation: torso-walk .68s infinite ease-in-out; }
+      #creature.walking .leg-left, #creature.running .leg-left { animation: stride-left .68s infinite ease-in-out; }
+      #creature.walking .leg-right, #creature.running .leg-right { animation: stride-right .68s infinite ease-in-out; }
+      #creature.walking .arm-left, #creature.running .arm-left { animation: stride-right .68s infinite ease-in-out; }
+      #creature.walking .arm-right, #creature.running .arm-right { animation: stride-left .68s infinite ease-in-out; }
+      #creature.running .body { animation: torso-run .3s infinite ease-in-out; }
+      #creature.running .limb { animation-duration: .3s; }
+      #creature.running.climbing .body, #creature.running.hanging .body { animation-duration: .3s; }
+      #creature.climbing .body { animation: climb-body .85s infinite ease-in-out; }
+      #creature.climbing .arm-left { animation: climb-left .85s infinite ease-in-out; }
+      #creature.climbing .arm-right { animation: climb-right .85s infinite ease-in-out; }
+      #creature.climbing .leg-left { animation: climb-right .85s infinite ease-in-out; }
+      #creature.climbing .leg-right { animation: climb-left .85s infinite ease-in-out; }
+      #creature.hanging .body { animation: hang-sway .9s infinite ease-in-out; transform-origin: 50% 10%; }
+      #creature.hanging .arm-left { animation: reach-left .9s infinite steps(2); }
+      #creature.hanging .arm-right { animation: reach-right .9s infinite steps(2); }
+      #creature.hanging .leg-left { animation: dangle-left .9s infinite ease-in-out; }
+      #creature.hanging .leg-right { animation: dangle-right .9s infinite ease-in-out; }
+      #creature.sleeping { transform-origin: 35% 90%; }
+      #creature.sleeping .body { animation: lie-down .65s forwards ease-out, sleep-breathe 2.2s .65s infinite ease-in-out; }
+      #creature.sleeping .arm-left { transform: rotate(65deg) translate(1px,4px); }
+      #creature.sleeping .arm-right { transform: rotate(-45deg); }
+      #creature.spinning .body { animation: acrobatic-flip 1.25s cubic-bezier(.32,.72,.3,1); }
+      #creature.spinning .arm { animation: tuck-arm 1.25s ease-in-out; }
+      #creature.spinning .leg { animation: tuck-leg 1.25s ease-in-out; }
+      #creature.jumping .body { animation: jump-body .9s cubic-bezier(.3,.05,.35,1); }
+      #creature.jumping .arm-left { animation: jump-arm-left .9s ease-in-out; }
+      #creature.jumping .arm-right { animation: jump-arm-right .9s ease-in-out; }
+      #creature.jumping .leg { animation: jump-leg .9s ease-in-out; }
       #creature.singing .head { animation: sing .35s infinite alternate; }
       #creature.grimacing .mouth { d: path("M 32 43 Q 41 33 50 43 Q 41 49 32 43"); }
       #creature.frowning .brow-left { transform: rotate(18deg); }
       #creature.frowning .brow-right { transform: rotate(-18deg); }
       #creature.sleeping .eye { transform: scaleY(.08); }
-      #creature.sleeping .arm { transform: rotate(22deg); }
+      #creature.profile .eye-right, #creature.profile .brow-right, #creature.profile .cheek-right { opacity: 0; }
+      #creature.profile .eye-left { transform: translateX(8px); }
+      #creature.profile .brow-left { transform: translateX(8px); }
+      #creature.profile .mouth { transform: translateX(5px); }
+      #creature:not(.profile) .nose-profile { opacity: 0; }
+      #creature.profile .nose-profile { opacity: 1; }
+      #creature.hanging .arm { d: path("M 31 61 Q 27 38 30 10"); }
+      #creature.hanging .arm-right { d: path("M 52 61 Q 57 38 54 10"); }
       .limb { fill: none; stroke: #d8b98c; stroke-width: 7; stroke-linecap: round; transform-box: fill-box; transform-origin: top center; }
       .skin { fill: #d8b98c; } .shirt { fill: #d96b4b; } .pants { fill: #3c6b68; }
       .eye { fill: #151918; transform-box: fill-box; transform-origin: center; transition: transform .18s; }
@@ -58,10 +91,27 @@
       .bubble.show { opacity: 1; transform: translateY(0) scale(1); }
       .note, .zzz { position: fixed; z-index: 2; color: #eacb88; font-weight: 800; pointer-events: none; animation: float 1.8s forwards ease-out; }
       .footer { position: fixed; right: 27px; bottom: 24px; color: #59635f; font: 600 .6rem/1 monospace; letter-spacing: .12em; pointer-events: none; }
-      @keyframes walk { to { transform: rotate(3deg) translateY(-3px); } }
-      @keyframes run { to { transform: rotate(6deg) translateY(-7px) scaleY(.95); } }
-      @keyframes breathe { 50% { transform: scaleY(.96) rotate(5deg); } }
-      @keyframes spin { to { transform: rotate(720deg); } }
+      @keyframes torso-walk { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-4px) rotate(2deg); } }
+      @keyframes torso-run { 0%,100% { transform: translateY(1px) rotate(-9deg) scaleY(.97); } 50% { transform: translateY(-7px) rotate(-5deg); } }
+      @keyframes stride-left { 0%,100% { transform: rotate(30deg); } 50% { transform: rotate(-32deg); } }
+      @keyframes stride-right { 0%,100% { transform: rotate(-32deg); } 50% { transform: rotate(30deg); } }
+      @keyframes climb-body { 0%,100% { transform: translate(2px,2px) rotate(5deg); } 50% { transform: translate(-2px,-5px) rotate(-4deg); } }
+      @keyframes climb-left { 0%,100% { transform: rotate(150deg) translateY(-6px); } 50% { transform: rotate(92deg) translateY(5px); } }
+      @keyframes climb-right { 0%,100% { transform: rotate(92deg) translateY(5px); } 50% { transform: rotate(150deg) translateY(-6px); } }
+      @keyframes hang-sway { 0%,100% { transform: rotate(-5deg) translateX(-2px); } 50% { transform: rotate(6deg) translateX(3px); } }
+      @keyframes reach-left { 0%,49% { transform: rotate(10deg) translateY(-6px); } 50%,100% { transform: rotate(-13deg); } }
+      @keyframes reach-right { 0%,49% { transform: rotate(13deg); } 50%,100% { transform: rotate(-10deg) translateY(-6px); } }
+      @keyframes dangle-left { 0%,100% { transform: rotate(16deg); } 50% { transform: rotate(-24deg); } }
+      @keyframes dangle-right { 0%,100% { transform: rotate(-18deg); } 50% { transform: rotate(22deg); } }
+      @keyframes lie-down { to { transform: translate(-18px,22px) rotate(82deg); } }
+      @keyframes sleep-breathe { 0%,100% { transform: translate(-18px,22px) rotate(82deg) scaleX(1); } 50% { transform: translate(-18px,22px) rotate(82deg) scaleX(.96); } }
+      @keyframes acrobatic-flip { 0% { transform: translateY(0) rotate(0) scale(1); } 12% { transform: translateY(7px) rotate(-12deg) scale(1.08,.9); } 38% { transform: translateY(-34px) rotate(230deg) scale(.88); } 68% { transform: translateY(-25px) rotate(510deg) scale(.9); } 88% { transform: translateY(4px) rotate(715deg) scale(1.08,.9); } 100% { transform: translateY(0) rotate(720deg) scale(1); } }
+      @keyframes tuck-arm { 20%,75% { transform: rotate(70deg) translateX(7px); } }
+      @keyframes tuck-leg { 20%,75% { transform: rotate(-35deg) translateY(-7px); } }
+      @keyframes jump-body { 0%,100% { transform: translateY(0) scale(1); } 12% { transform: translateY(5px) scale(1.08,.9); } 48% { transform: translateY(-38px) rotate(4deg); } 86% { transform: translateY(3px) scale(1.06,.92); } }
+      @keyframes jump-arm-left { 20%,65% { transform: rotate(145deg); } }
+      @keyframes jump-arm-right { 20%,65% { transform: rotate(-145deg); } }
+      @keyframes jump-leg { 25%,70% { transform: rotate(35deg) translateY(-5px); } }
       @keyframes sing { to { transform: translateY(-2px) rotate(3deg); } }
       @keyframes float { to { transform: translate(18px,-55px) rotate(12deg); opacity: 0; } }
       @media (prefers-reduced-motion: reduce) { #creature .body { animation-duration: 1.5s !important; } }
@@ -80,11 +130,12 @@
         <g class="head">
           <ellipse class="skin" cx="41" cy="34" rx="25" ry="27"/>
           <path fill="#43372e" d="M18 30 Q16 7 41 6 Q65 6 65 29 Q58 15 43 16 Q28 13 18 30Z"/>
-          <ellipse class="cheek" cx="24" cy="42" rx="5" ry="3"/><ellipse class="cheek" cx="58" cy="42" rx="5" ry="3"/>
+          <ellipse class="cheek cheek-left" cx="24" cy="42" rx="5" ry="3"/><ellipse class="cheek cheek-right" cx="58" cy="42" rx="5" ry="3"/>
           <line class="brow brow-left" x1="26" y1="27" x2="35" y2="26"/><line class="brow brow-right" x1="47" y1="26" x2="56" y2="27"/>
           <g class="eye eye-left"><circle cx="31" cy="33" r="5"/><circle class="pupil pupil-left" cx="32" cy="31.5" r="1.6"/></g>
           <g class="eye eye-right"><circle cx="51" cy="33" r="5"/><circle class="pupil pupil-right" cx="52" cy="31.5" r="1.6"/></g>
           <path class="mouth" d="M34 44 Q41 48 48 44"/>
+          <path class="nose-profile" d="M45 34 Q55 37 46 40" fill="none" stroke="#9e7e61" stroke-width="2" stroke-linecap="round"/>
         </g>
       </svg>
     </div>
@@ -103,7 +154,6 @@
       function bounds() { return { right: innerWidth - margin - size.w, bottom: innerHeight - margin - size.h }; }
       function setState(next, duration = 2500) {
         state = next; stateUntil = performance.now() + duration;
-        el.className = next;
         if (next === 'singing') emitNotes();
         if (next === 'sleeping') emitZzz();
       }
@@ -118,18 +168,20 @@
       function emitNotes() { particle('♪', 'note'); setTimeout(() => state === 'singing' && particle('♫', 'note'), 650); }
       function emitZzz() { particle('z', 'zzz'); setTimeout(() => state === 'sleeping' && particle('Z', 'zzz'), 700); }
       function flee() {
-        if (state !== 'running') say('Hé ! Pas touche !', 1500);
+        if (state === 'running') return;
+        say('Hé ! Pas touche !', 1500);
         setState('running', 1800); speed = 190; direction = Math.random() > .5 ? 1 : -1;
       }
       function randomAct(now) {
         if (now < stateUntil) return;
         speed = 46;
         const r = Math.random();
-        if (r < .15) { setState('sleeping', 3500); say('… cinq minutes…'); }
-        else if (r < .3) { setState('singing', 2800); say('La la laaa ♪'); }
-        else if (r < .43) setState('spinning', 900);
-        else if (r < .57) setState('grimacing', 1800);
-        else if (r < .7) { setState('frowning', 2200); say(phrases[Math.floor(Math.random()*phrases.length)]); }
+        if (r < .12 && side === 0) { setState('sleeping', 3500); say('… cinq minutes…'); }
+        else if (r < .23 && side === 0) setState('jumping', 900);
+        else if (r < .36) { setState('singing', 2800); say('La la laaa ♪'); }
+        else if (r < .5 && side === 0) setState('spinning', 1250);
+        else if (r < .64) setState('grimacing', 1800);
+        else if (r < .77) { setState('frowning', 2200); say(phrases[Math.floor(Math.random()*phrases.length)]); }
         else setState('walking', 2500 + Math.random()*3000);
       }
       function travel(distance) {
@@ -146,10 +198,18 @@
         const cx=x+41, cy=y+45, dx=mouse.x-cx, dy=mouse.y-cy, dist=Math.hypot(dx,dy);
         if (mouse.active && dist < 145 && state !== 'sleeping') flee();
         randomAct(now);
-        if (!['sleeping','singing','grimacing','frowning'].includes(state)) travel(speed * dt * (reduced ? .35 : 1));
+        if (!['sleeping','singing','grimacing','frowning','jumping','spinning'].includes(state)) travel(speed * dt * (reduced ? .35 : 1));
         const lookX = Math.max(-1.7, Math.min(1.7, dx/80)), lookY = Math.max(-1.4, Math.min(1.4, dy/80));
         pupils.forEach(p => { p.setAttribute('transform', `translate(${lookX} ${lookY})`); });
-        const face = dx < 0 ? -1 : 1;
+        const posture = side === 0 ? 'ground' : side === 2 ? 'hanging' : 'climbing';
+        const profile = state !== 'grimacing' && state !== 'frowning' && state !== 'singing';
+        el.className = `${state} ${posture} ${profile ? 'profile' : ''}`;
+        let face = dx < 0 ? -1 : 1;
+        if (profile) {
+          if (side === 0) face = direction;
+          else if (side === 2) face = -direction;
+          else face = side === 1 ? 1 : -1;
+        }
         el.style.transform = `translate3d(${x}px,${y}px,0) scaleX(${face})`;
         bubble.style.left = `${Math.max(12, Math.min(innerWidth-190, x+55))}px`; bubble.style.top = `${Math.max(12,y-18)}px`;
         requestAnimationFrame(frame);
